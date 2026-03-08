@@ -129,7 +129,7 @@ if (isset($_GET['ajax'])) {
             FROM borrowings b
             JOIN equipment e ON b.equipment_id = e.id
             JOIN users u ON b.user_id = u.id
-            WHERE (e.name LIKE :search OR u.username LIKE :search OR u.first_name LIKE :search OR u.last_name LIKE :search)";
+            WHERE (e.name LIKE :search_equip OR u.username LIKE :search_username OR u.first_name LIKE :search_firstname OR u.last_name LIKE :search_lastname)";
     
     if ($date_start != "") $sql .= " AND b.borrow_date >= :date_start";
     if ($date_end != "") $sql .= " AND b.borrow_date <= :date_end";
@@ -139,7 +139,10 @@ if (isset($_GET['ajax'])) {
     $sql .= " ORDER BY b.borrow_date DESC";
     
     $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':search', $search);
+    $stmt->bindValue(':search_equip', $search);
+    $stmt->bindValue(':search_username', $search);
+    $stmt->bindValue(':search_firstname', $search);
+    $stmt->bindValue(':search_lastname', $search);
     if ($date_start != "") $stmt->bindValue(':date_start', $date_start);
     if ($date_end != "") $stmt->bindValue(':date_end', $date_end);
     if ($status != "") $stmt->bindValue(':status', $status);
